@@ -72,10 +72,12 @@ Every leaf folder contains a `SKILL.md` with YAML frontmatter (`name`, `descript
 
 | Skill | What it covers |
 | --- | --- |
-| **swiftui-fundamentals** | Views, layout (stacks/grids/`Layout`), modifiers, lists, `NavigationStack`, controls, animations |
+| **swiftui-fundamentals** | Views, layout (stacks/grids/`Layout`), modifiers, lists, `NavigationStack`, controls, animations, Liquid Glass. *Building* UI — for *auditing* it, see `apple-hig-review` |
 | **swiftui-state-and-data-flow** | `@State`, `@Binding`, `@Environment`, `@Bindable`, passing data, single source of truth |
-| **ios-app-architecture** | `App`/`Scene` lifecycle, `@main`, MVVM with `@Observable`, dependency injection, `.task`/lifecycle hooks |
+| **ios-app-architecture** | `App`/`Scene` lifecycle, `@main`, MVVM with `@Observable`, dependency injection, `.task`/lifecycle hooks, App Intents |
 | **combine-essentials** | Publishers, subscribers, operators, `@Published`, when to use Combine vs. `async`/`await` |
+| **app-store-review** | Pre-submission **App Store Review Guideline** compliance detectable in code/config: Info.plist usage strings, `UIBackgroundModes`, private/deprecated API, account deletion, ATT, `PrivacyInfo.xcprivacy`, export compliance. Ships with `guidelines-full.txt` |
+| **apple-hig-review** | **Human Interface Guidelines** UI audit in code: Dynamic Type, semantic colors/Dark Mode, SF Symbols, 44pt hit targets, navigation/components, feedback/empty states, accessibility, i18n. Severity-graded review checklist |
 
 ## Installation
 
