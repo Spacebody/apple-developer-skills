@@ -8,7 +8,8 @@ description: >-
   task to the right specialized skill(s) — swift-concurrency, foundation-essentials,
   networking-urlsession, swiftdata-persistence, observation-framework,
   swiftui-fundamentals, swiftui-state-and-data-flow, ios-app-architecture,
-  combine-essentials — so only the relevant ones are loaded, not all of them.
+  combine-essentials, app-store-review, apple-hig-review — so only the relevant
+  ones are loaded, not all of them.
 ---
 
 # Apple Development Router
@@ -44,6 +45,8 @@ so you load only what's needed. The specialized skills carry the actual guidance
 | Calling a REST/HTTP API, `URLSession`, decoding JSON responses, uploads/downloads | `networking-urlsession` |
 | `Codable`, date/number/currency formatting, files, `UserDefaults`, units | `foundation-essentials` |
 | Existing Combine code, debounced/throttled pipelines, merging event streams | `combine-essentials` |
+| Pre-submission App Store compliance: Info.plist usage strings, background modes, private API, account deletion, ATT, privacy manifest ("会不会被拒"/"审核合规") | `app-store-review` |
+| UI review against Apple HIG in code: Dynamic Type, semantic colors/Dark Mode, 44pt hit targets, standard navigation/components, accessibility ("HIG 审查"/"界面是否符合苹果规范") | `apple-hig-review` |
 
 ## Common multi-skill workflows
 
@@ -57,6 +60,8 @@ Most real features touch a few skills. Typical bundles — load these together, 
   (+ `observation-framework` for non-`@Query` state).
 - **Fixing concurrency/data-race build errors** → `swift-concurrency` (alone is usually enough).
 - **Reactive search / live-updating input** → `combine-essentials` (+ `swiftui-state-and-data-flow`).
+- **Pre-submission / release review** → `app-store-review` (guideline compliance in code/config) +
+  `apple-hig-review` (UI against HIG). Run both before submitting to App Store.
 
 ## Disambiguation hints
 

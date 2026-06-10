@@ -36,7 +36,9 @@ apple-developer-skills/
 │       ├── swiftui-fundamentals/
 │       ├── swiftui-state-and-data-flow/
 │       ├── ios-app-architecture/
-│       └── combine-essentials/
+│       ├── combine-essentials/
+│       ├── app-store-review/        # App Store guideline compliance review (code/config level)
+│       └── apple-hig-review/        # Human Interface Guidelines UI review (code level)
 ├── LICENSE
 └── README.md
 ```

@@ -16,6 +16,10 @@ SwiftUI is the declarative UI framework for all Apple platforms. You describe *w
 state; the framework renders and updates it. For state/data flow see `swiftui-state-and-data-flow` and
 `observation-framework`; for app structure see `ios-app-architecture`.
 
+> **Scope:** this skill is for *building* UI. To *audit* finished UI against Apple's Human Interface Guidelines
+> (Dynamic Type, semantic colors/Dark Mode, 44pt hit targets, accessibility, standard navigation/components), use
+> the `apple-hig-review` skill instead — it's a severity-graded review checklist, not a how-to-build reference.
+
 > **Versions.** Baseline iOS 26; forward notes for iOS 27 (developer beta, public release fall 2026). iOS 26
 > introduced the **Liquid Glass** design; iOS 27 refines it ("Liquid Glass 2": new transparency controls) and adds
 > **adaptive/foldable layout** APIs (hinge-state) for devices like the iPhone Fold.
