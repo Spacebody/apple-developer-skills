@@ -85,7 +85,7 @@ Skills live in `~/.claude/skills/` (user scope) or `<project>/.claude/skills/` (
 Copy the skill folders you want:
 
 ```bash
-git clone https://github.com/<your-username>/apple-developer-skills.git
+git clone https://github.com/Spacebody/apple-developer-skills.git
 cd apple-developer-skills
 
 # Install every skill at the user level
