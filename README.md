@@ -25,6 +25,7 @@ Each skill is a self-contained `SKILL.md` that Claude can load on demand to writ
 ```
 apple-developer-skills/
 ├── skills/
+│   ├── apple-dev-router/           # Router: maps a task to the right specialized skill(s)
 │   ├── shared/                     # Cross-platform Apple frameworks (iOS, macOS, watchOS, tvOS)
 │   │   ├── swift-concurrency/
 │   │   ├── foundation-essentials/
@@ -43,6 +44,17 @@ apple-developer-skills/
 Every leaf folder contains a `SKILL.md` with YAML frontmatter (`name`, `description`) and a progressive-disclosure body.
 
 ## Skills
+
+### Router (`skills/apple-dev-router/`)
+
+| Skill | What it covers |
+| --- | --- |
+| **apple-dev-router** | Entry point for broad/ambiguous Apple-dev tasks. Maps the task to the right specialized skill(s) so only the relevant ones load. Documents how skill loading works (progressive disclosure — descriptions are always in context, bodies load only on invocation, no duplicate loading). |
+
+> **On "auto-loading" skills:** Claude Code already loads skills on demand — each skill's `description` is the
+> trigger, the body loads only when invoked, and an already-loaded skill is never reloaded. You don't need a skill
+> to load other skills (it can't anyway). `apple-dev-router` instead acts as a *router/index* for broad requests,
+> pointing Claude at the right specialized skill(s) for the current step.
 
 ### Cross-platform (`skills/shared/`)
 
@@ -74,7 +86,7 @@ cd apple-developer-skills
 
 # Install every skill at the user level
 mkdir -p ~/.claude/skills
-cp -R skills/shared/* skills/ios/* ~/.claude/skills/
+cp -R skills/apple-dev-router skills/shared/* skills/ios/* ~/.claude/skills/
 
 # …or install a single skill
 cp -R skills/shared/swift-concurrency ~/.claude/skills/
