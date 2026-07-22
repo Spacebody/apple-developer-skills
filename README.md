@@ -6,7 +6,7 @@ modern Apple-platform apps with Swift and SwiftUI.
 
 The repository ships two installable distributions:
 
-- `skills/`: Claude Code Agent Skills.
+- `claude/skills/`: Claude Code Agent Skills.
 - `codex/skills/`: Codex Skills adapted for Codex's skill-loading model.
 
 Each skill is a self-contained `SKILL.md` that the target agent can load on demand to write idiomatic,
@@ -29,7 +29,7 @@ Codex environment.
 > This release targets **modern iOS core** development and includes Codex-specific macOS review, adaptation, and
 > performance workflows. Native macOS SwiftUI/AppKit implementation skills maintained by this repository and
 > watchOS skill sets remain on the roadmap.
-> The `skills/shared/` skills already apply to every Apple platform, so adding macOS/watchOS only requires
+> The `claude/skills/shared/` skills already apply to every Apple platform, so adding macOS/watchOS only requires
 > new platform-specific folders — the shared foundations are reused, not duplicated.
 
 ### macOS Pathway coverage
@@ -54,21 +54,22 @@ being reduced to checklist items inside a UI review.
 
 ```
 apple-developer-skills/
-├── skills/
-│   ├── apple-dev-router/           # Claude router: maps a task to the right specialized skill(s)
-│   ├── shared/                     # Cross-platform Apple frameworks (iOS, macOS, watchOS, tvOS)
-│   │   ├── swift-concurrency/
-│   │   ├── foundation-essentials/
-│   │   ├── networking-urlsession/
-│   │   ├── swiftdata-persistence/
-│   │   └── observation-framework/
-│   └── ios/                        # iOS app development
-│       ├── swiftui-fundamentals/
-│       ├── swiftui-state-and-data-flow/
-│       ├── ios-app-architecture/
-│       ├── combine-essentials/
-│       ├── app-store-review/        # App Store guideline compliance review (code/config level)
-│       └── apple-hig-review/        # Human Interface Guidelines UI review (code level)
+├── claude/
+│   └── skills/
+│       ├── apple-dev-router/           # Claude router: maps a task to specialized skills
+│       ├── shared/                     # Cross-platform Apple frameworks
+│       │   ├── swift-concurrency/
+│       │   ├── foundation-essentials/
+│       │   ├── networking-urlsession/
+│       │   ├── swiftdata-persistence/
+│       │   └── observation-framework/
+│       └── ios/                        # iOS app development
+│           ├── swiftui-fundamentals/
+│           ├── swiftui-state-and-data-flow/
+│           ├── ios-app-architecture/
+│           ├── combine-essentials/
+│           ├── app-store-review/
+│           └── apple-hig-review/
 ├── codex/
 │   └── skills/
 │       ├── apple-dev-router/        # Codex router adapted for Codex skill trigger rules
@@ -88,17 +89,21 @@ apple-developer-skills/
 │       ├── macos-hig-review/       # Codex-only macOS HIG and desktop-convention review
 │       ├── macos-performance-profiling/ # Instruments-based macOS performance diagnosis
 │       └── apple-hig-review/
+├── .claude/
+│   └── settings.local.json          # Repository-local Claude permissions, not a skill distribution
 ├── LICENSE
 └── README.md
 ```
 
 Every leaf folder contains a `SKILL.md` with YAML frontmatter (`name`, `description`) and a progressive-disclosure body.
+The hidden `.claude/` directory is project configuration only; installable Claude skills live exclusively under
+`claude/skills/`.
 
 ## Claude and Codex isolation
 
 The Claude and Codex distributions are intentionally separate directories, not symlinks:
 
-- Install Claude Code skills from `skills/` into `~/.claude/skills/`.
+- Install Claude Code skills from `claude/skills/` into `~/.claude/skills/`.
 - Install Codex skills from `codex/skills/` into `~/.codex/skills/`.
 - Keep the skill folder names the same inside each agent's own skill directory so prompts such as
   `swift-concurrency` work consistently in both tools.
@@ -114,10 +119,10 @@ when Codex routing changes.
 ## Skills
 
 The shared catalog below describes topics present in both distributions. Claude keeps the source grouped by
-platform under `skills/`; Codex keeps install-ready flat folders under `codex/skills/`. Codex-only additions and
+platform under `claude/skills/`; Codex keeps install-ready flat folders under `codex/skills/`. Codex-only additions and
 their narrower ownership boundaries are listed separately.
 
-### Router (`skills/apple-dev-router/`, `codex/skills/apple-dev-router/`)
+### Router (`claude/skills/apple-dev-router/`, `codex/skills/apple-dev-router/`)
 
 | Skill | What it covers |
 | --- | --- |
@@ -127,7 +132,7 @@ their narrower ownership boundaries are listed separately.
 > directories. Each skill's `description` is the trigger, and `apple-dev-router` acts as a router/index for broad
 > requests by pointing the agent at the right specialized skill(s) for the current step.
 
-### Cross-platform (`skills/shared/`)
+### Cross-platform (`claude/skills/shared/`)
 
 | Skill | What it covers |
 | --- | --- |
@@ -144,7 +149,7 @@ their narrower ownership boundaries are listed separately.
 | **apple-keychain-passkeys** | Small-secret Keychain CRUD and protection, access groups/synchronization, LocalAuthentication-gated access, passkey registration/assertion, `webcredentials` AASA, and the client/server verification boundary. Excludes general cryptography, OAuth, Sign in with Apple, and policy-only review. |
 | **apple-localization** | String Catalog creation/migration, `LocalizedStringResource`, `String(localized:)`, generated symbols, plural/device variants, package/table ownership, pseudolanguage tests, language/region coverage, and RTL implementation. |
 
-### iOS (`skills/ios/`)
+### iOS (`claude/skills/ios/`)
 
 | Skill | What it covers |
 | --- | --- |
@@ -190,7 +195,7 @@ skill is installed. The repository's own cross-platform and foundational skills 
   OAuth, signing, App Store policy, or server-side WebAuthn.
 - `apple-localization` owns catalogs, extraction, plural/device variants, RTL implementation, and localization test
   coverage; `foundation-essentials` keeps focused locale-aware value formatting.
-- `swiftui-fundamentals/references/ios-27.md` keeps Apple-published Xcode 27 changes separate from unverified
+- `codex/skills/swiftui-fundamentals/references/ios-27.md` keeps Apple-published Xcode 27 changes separate from unverified
   forward-looking watch items. Load it only for iOS 27, the 2027 OS generation, or Xcode 27 work.
 
 ## Installation
@@ -206,10 +211,10 @@ cd apple-developer-skills
 
 # Install every skill at the user level
 mkdir -p ~/.claude/skills
-cp -R skills/apple-dev-router skills/shared/* skills/ios/* ~/.claude/skills/
+cp -R claude/skills/apple-dev-router claude/skills/shared/* claude/skills/ios/* ~/.claude/skills/
 
 # …or install a single skill
-cp -R skills/shared/swift-concurrency ~/.claude/skills/
+cp -R claude/skills/shared/swift-concurrency ~/.claude/skills/
 ```
 
 Claude automatically discovers any `SKILL.md` under those directories and loads it when a task matches its
