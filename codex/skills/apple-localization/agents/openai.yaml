@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Localization"
+  short_description: "Implement String Catalogs and RTL"
+  default_prompt: "Use $apple-localization to localize this Apple-platform feature with String Catalogs and RTL support."

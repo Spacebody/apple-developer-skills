@@ -82,7 +82,7 @@ App Store《审核指南》分五部分：1 安全、2 性能、3 商业、4 设
   触发条件不止 IDFA：只要**跨其他公司的 App/网站追踪**，或把邮箱/手机号/哈希 ID/设备指纹/广告 SDK 数据用于**定向广告、广告归因、数据经纪**，都需 ATT。检查 `AdSupport`/`ASIdentifierManager`、广告或归因 SDK、tracking domains、`PrivacyInfo.xcprivacy` 的 `NSPrivacyTracking=true`。要求：追踪前调用 `ATTrackingManager.requestTrackingAuthorization` 并配 `NSUserTrackingUsageDescription`，且**不得把授权作为使用 App 的条件**。无任何跨公司追踪则 N/A。
 
 - **A7 — 敏感数据本地存储** `Medium`
-  API Key、令牌、密码等必须存 Keychain，不进 `UserDefaults`/明文文件/日志。核对网络层与日志未打印密钥/PII。
+  API Key、令牌、密码等必须存 Keychain，不进 `UserDefaults`/明文文件/日志。核对网络层与日志未打印密钥/PII；实现或修复交给 `apple-keychain-passkeys`。
 
 ### B. 账户（5.1.1(v)）
 

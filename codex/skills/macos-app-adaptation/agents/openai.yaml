@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS App Adaptation"
+  short_description: "Adapt iPad and iOS apps for Mac"
+  default_prompt: "Use $macos-app-adaptation to adapt this iPad or iOS app for a native-feeling Mac experience."

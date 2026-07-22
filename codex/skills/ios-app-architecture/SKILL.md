@@ -1,23 +1,24 @@
 ---
 name: ios-app-architecture
 description: >-
-  Structure a SwiftUI iOS app — the App/Scene lifecycle with @main and
-  WindowGroup, MVVM with @Observable view models on the @MainActor, dependency
-  injection via the environment, loading data with .task and reacting to lifecycle
-  with scenePhase/onChange, folder/module organization, and the App Intents
-  surface for Siri/Shortcuts. Use when starting a new app, organizing code,
-  wiring up view models and dependencies, or deciding where logic belongs on
-  iOS 26+ (forward to iOS 27).
+  Structure the root of a SwiftUI iOS app: App/Scene lifecycle, WindowGroup,
+  dependency ownership and injection, feature/module boundaries, lifecycle-driven
+  work, and the placement of domain services and shared state. Use when starting
+  an app, designing its root dependency graph, reorganizing feature boundaries,
+  or deciding where app-level logic belongs. Preserve an existing project's
+  architecture; do not use this as a generic SwiftUI view-refactoring skill and
+  do not introduce MVVM or a view model by default.
 ---
 
 # iOS App Architecture (SwiftUI)
 
-A pragmatic, modern structure for SwiftUI apps: thin views, `@Observable` models on the main actor, dependencies
-injected through the environment, and async work driven by `.task`. Builds on `observation-framework`,
+A pragmatic, architecture-neutral structure for SwiftUI apps: preserve local conventions, keep view-local state
+in the view, place domain behavior in services/models, own shared state at a stable root, and add a dedicated
+screen model only when coordination complexity justifies it. Builds on `observation-framework`,
 `swiftui-state-and-data-flow`, and `swift-concurrency`.
 
-> **Versions.** iOS 26 baseline; forward to iOS 27. Note: **App Intents is now the required integration surface
-> for Siri**, and SiriKit is deprecated — model user-facing actions as App Intents for Siri/Shortcuts/Spotlight.
+> **Boundary.** Use `build-ios-apps:swiftui-view-refactor` for view-file restructuring and
+> `build-ios-apps:ios-app-intents` for Siri, Shortcuts, Spotlight, widgets, or controls.
 
 ## App entry point & lifecycle
 
@@ -45,9 +46,18 @@ struct TasksApp: App {
 - React to foreground/background via `@Environment(\.scenePhase)`.
 - Use `.modelContainer` once at the top for SwiftData.
 
-## MVVM with @Observable
+## Place state and logic deliberately
 
-Keep views declarative; put state + logic in an `@Observable` model pinned to the main actor.
+Default to SwiftUI's MV style rather than adding a view model automatically:
+
+- Keep transient presentation state in the owning view with `@State`.
+- Put domain operations and reusable business rules in services or domain models.
+- Own shared `@Observable` state once at the app or feature root and pass it explicitly or through the environment.
+- Add a screen-specific `@MainActor @Observable` model only for substantial, long-lived coordination such as
+  multiple async operations, derived screen state, or an existing MVVM convention. Do not create one merely to
+  mirror local state or wrap environment dependencies.
+
+When a dedicated screen model is justified, use this shape:
 
 ```swift
 @MainActor
@@ -88,7 +98,8 @@ struct TaskList: View {
 
 Rules of thumb:
 - The view reads model state and forwards user intent (`await model.add(...)`); it contains no business logic.
-- The model owns state, talks to services, and stays `@MainActor` so UI updates are safe.
+- The optional screen model coordinates UI-facing state and services; domain rules remain in domain types/services.
+- UI-facing models stay `@MainActor` so state updates are safe.
 - Heavy/concurrent work hops to actors or task groups inside the model (see `swift-concurrency`).
 
 ## Dependency injection
@@ -114,8 +125,9 @@ extension EnvironmentValues {
 // Consume: @Environment(\.taskService) private var service
 ```
 
-Prefer constructor injection for view-model dependencies; use the environment for cross-cutting singletons
-(session, theme, analytics).
+Prefer explicit initializer injection for feature-local dependencies. Use the environment for shared cross-cutting
+dependencies or state with clear root ownership (session, theme, analytics). If an existing project has a stronger
+local convention, preserve it.
 
 ## Loading data & reacting to changes
 
@@ -132,7 +144,7 @@ Group by feature, not by type, once the app grows:
 ```
 App/                 TasksApp.swift, RootView.swift
 Features/
-  TaskList/          TaskList.swift, TaskListModel.swift, TaskRow.swift
+  TaskList/          TaskList.swift, TaskRow.swift, optional TaskListModel.swift
   TaskDetail/        …
 Models/              Task.swift (domain + @Model)
 Services/            TaskService.swift, LiveTaskService.swift
@@ -141,26 +153,16 @@ Shared/              extensions, reusable views, design system
 
 For larger apps, split features into Swift Package modules to enforce boundaries and speed builds.
 
-## App Intents (Siri / Shortcuts / Spotlight)
+## System surfaces
 
-Expose key actions as App Intents (replaces SiriKit). This makes them available to Siri, Shortcuts, Spotlight,
-and widgets:
-
-```swift
-struct AddTaskIntent: AppIntent {
-    static let title: LocalizedStringResource = "Add Task"
-    @Parameter(title: "Title") var taskTitle: String
-    func perform() async throws -> some IntentResult {
-        await TaskStore.shared.add(taskTitle)
-        return .result()
-    }
-}
-```
+Use `build-ios-apps:ios-app-intents` for App Intents and related Siri, Shortcuts, Spotlight, widget, and control
+surfaces. Keep this skill focused on the app's root architecture and dependency boundaries.
 
 ## Pitfalls
 
-- **Business logic in views** — move it into the `@Observable` model.
-- **Model not on `@MainActor`** — UI-facing models should be; do off-main work explicitly inside.
+- **Business logic in views** — move reusable domain behavior into a service or domain model; introduce a screen model only when coordination warrants it.
+- **View models by reflex** — prefer local SwiftUI state and explicit dependencies until a dedicated coordination object has a clear responsibility.
+- **UI-facing model not on `@MainActor`** — isolate UI state on the main actor; move heavy work to an actor or service.
 - **Creating models in `body`** — own them with `@State`/environment so they persist across re-renders.
 - **Singletons everywhere** — inject dependencies; it keeps code testable and previewable.
 - **Using SiriKit for new voice features** — use App Intents.
@@ -172,9 +174,11 @@ struct AddTaskIntent: AppIntent {
 | App entry | `@main struct: App` + `WindowGroup` |
 | App-wide model | `@State` in `App` + `.environment(_:)` |
 | Foreground/background | `@Environment(\.scenePhase)` + `.onChange` |
-| Screen logic | `@MainActor @Observable` view model |
+| Local screen state | `@State`, `@Binding`, `@Environment`, `@Query` as appropriate |
+| Domain behavior | Service or domain model |
+| Complex screen coordination | Optional `@MainActor @Observable` model |
 | Load on appear | `.task { await model.load() }` |
 | Dependencies | protocol + constructor or `@Entry` environment key |
 | Persistence | `.modelContainer` + SwiftData |
 | Code layout | group by feature; modularize with SPM when large |
-| Siri/Shortcuts | App Intents (`AppIntent`) |
+| Siri/Shortcuts | `build-ios-apps:ios-app-intents` |

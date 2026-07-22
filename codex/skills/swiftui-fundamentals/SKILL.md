@@ -1,13 +1,13 @@
 ---
 name: swiftui-fundamentals
 description: >-
-  Build iOS user interfaces with SwiftUI — views and view composition, layout
-  with HStack/VStack/ZStack/Grid and the Layout protocol, view modifiers, List
-  and ForEach, NavigationStack and navigationDestination, sheets/alerts,
-  controls (Button/TextField/Toggle/Picker), animations and transitions, and the
-  Liquid Glass design system (glassEffect, .glass styles, adaptive/foldable
-  layouts). Use when creating SwiftUI screens, laying out views, building
-  navigation, styling, or adopting the current iOS 26/27 look and feel.
+  Provide a foundational SwiftUI reference for view composition, stacks and
+  grids, modifiers, List and ForEach, NavigationStack, sheets and alerts,
+  standard controls, and basic animations. Use for learning SwiftUI fundamentals,
+  answering a focused API question, or as a fallback when no installed
+  build-ios-apps:* skill is a closer match. Do not auto-use for production screen
+  architecture, view refactoring, Liquid Glass, performance, Simulator debugging,
+  or other work owned by a specialized build-ios-apps:* skill.
 ---
 
 # SwiftUI Fundamentals (iOS)
@@ -20,9 +20,14 @@ state; the framework renders and updates it. For state/data flow see `swiftui-st
 > (Dynamic Type, semantic colors/Dark Mode, 44pt hit targets, accessibility, standard navigation/components), use
 > the `apple-hig-review` skill instead — it's a severity-graded review checklist, not a how-to-build reference.
 
-> **Versions.** Baseline iOS 26; forward notes for iOS 27 (developer beta, public release fall 2026). iOS 26
-> introduced the **Liquid Glass** design; iOS 27 refines it ("Liquid Glass 2": new transparency controls) and adds
-> **adaptive/foldable layout** APIs (hinge-state) for devices like the iPhone Fold.
+> **Specialized work.** Prefer `build-ios-apps:swiftui-ui-patterns` for production component patterns,
+> `build-ios-apps:swiftui-view-refactor` for restructuring, and
+> `build-ios-apps:swiftui-liquid-glass` for Liquid Glass implementation or review. Confirm SDK availability
+> from the installed toolchain instead of assuming unreleased APIs.
+
+> **iOS 27 / Xcode 27.** When a task targets the 2027 platform generation, read
+> [references/ios-27.md](references/ios-27.md). It separates Apple-published changes from a retained watchlist
+> that must be rechecked against the shipping SDK.
 
 ## Views & composition
 
@@ -65,11 +70,11 @@ ScrollView {
 }
 ```
 
-### Adaptive & foldable layout (iOS 27)
+### Adaptive layout
 
-Drive layout from size class and the new hinge/adaptive APIs rather than hard-coding device checks. Continue to
-use `@Environment(\.horizontalSizeClass)` and `NavigationSplitView` for iPad/large widths; on foldables prefer
-fluid reflow over fixed frames so content adapts to the unfolded canvas instead of letterboxing.
+Drive layout from available space and size class rather than hard-coded device checks. Use
+`@Environment(\.horizontalSizeClass)` and `NavigationSplitView` for iPad/large widths, and prefer fluid reflow
+over fixed frames.
 
 ## Modifiers
 
@@ -146,27 +151,11 @@ Wrap form-like UIs in `Form { … }` for platform-correct styling.
 
 ## Liquid Glass styling (iOS 26+)
 
-The system applies Liquid Glass to standard navigation/toolbars/sheets automatically — adopt standard components
-and you get it for free. Apply glass to custom surfaces:
+Prefer standard system navigation bars, toolbars, sheets, and controls; they receive the platform's
+Liquid Glass treatment automatically. Reach for custom glass APIs only when building custom app chrome.
 
-```swift
-// Custom view on a glass surface:
-MyControlBar()
-    .glassEffect()                       // Liquid Glass material
-    .glassEffect(in: .capsule)           // shaped
-
-// Glass-styled button:
-Button("Filter") { }.buttonStyle(.glass)
-
-// Group multiple glass elements so they morph together coherently:
-GlassEffectContainer {
-    HStack { GlassButton(); GlassButton() }
-}
-```
-
-iOS 27 ("Liquid Glass 2") adds finer transparency controls; if your app mixes SwiftUI and UIKit, audit
-`GlassEffectContainer` boundaries so adjacent glass elements morph consistently. Don't over-apply glass to content
-areas — it's for chrome (controls, bars, floating surfaces), not body content.
+Use `build-ios-apps:swiftui-liquid-glass` for Liquid Glass APIs, availability handling, modifier ordering,
+container placement, performance, and design fit. Keep this fundamentals skill focused on stable SwiftUI basics.
 
 ## Animations & transitions
 
@@ -198,5 +187,6 @@ zoom navigation transitions) for shared-element animations.
 | Multi-column | `NavigationSplitView` |
 | Modal | `.sheet` / `.alert` / `.confirmationDialog` |
 | Async image | `AsyncImage` |
-| Liquid Glass surface | `.glassEffect()` / `.buttonStyle(.glass)` / `GlassEffectContainer` |
+| Liquid Glass | `build-ios-apps:swiftui-liquid-glass` |
+| iOS 27 / Xcode 27 | [references/ios-27.md](references/ios-27.md) |
 | Animate | `withAnimation { }` / `.animation(_:value:)` / `.transition` |

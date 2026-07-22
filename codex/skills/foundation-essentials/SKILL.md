@@ -120,7 +120,8 @@ let didOnboard = UserDefaults.standard.bool(forKey: "didOnboard")
 ```
 
 In SwiftUI, bind directly with `@AppStorage("didOnboard") var didOnboard = false`.
-For secrets/tokens use the Keychain, not UserDefaults. For app data use SwiftData (see `swiftdata-persistence`).
+For secrets/tokens use the Keychain, not UserDefaults; use `apple-keychain-passkeys` for implementation. For app
+data use SwiftData (see `swiftdata-persistence`).
 
 ## Measurement & units
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Keychain & Passkeys"
+  short_description: "Implement Keychain and passkeys safely"
+  default_prompt: "Use $apple-keychain-passkeys to implement secure secret storage or passkey authentication."

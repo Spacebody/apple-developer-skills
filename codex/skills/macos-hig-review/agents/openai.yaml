@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS HIG Review"
+  short_description: "Review macOS UI against Apple HIG"
+  default_prompt: "Use $macos-hig-review to audit this macOS interface for code-detectable HIG issues."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Performance Profiling"
+  short_description: "Profile macOS apps with Instruments"
+  default_prompt: "Use $macos-performance-profiling to measure and diagnose this macOS performance problem."
