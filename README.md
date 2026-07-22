@@ -14,14 +14,14 @@ up-to-date code (Swift 6 concurrency, the Observation framework, SwiftData, asyn
 
 ## Status
 
-| Platform | Status |
-| --- | --- |
-| iOS | ✅ Available |
-| Cross-platform (Swift, Foundation, SwiftData, networking) | ✅ Available |
-| Keychain/passkeys and localization workflows (Codex) | ✅ Available |
-| macOS HIG, Catalyst/iOS-on-Mac adaptation, and performance profiling (Codex) | ✅ Available |
-| Repository-owned native macOS SwiftUI/AppKit implementation skills | 🚧 Planned |
-| watchOS | 🚧 Planned |
+| Platform or capability | Status | Supported agents |
+| --- | --- | --- |
+| iOS | ✅ Available | Claude Code, Codex |
+| Cross-platform (Swift, Foundation, SwiftData, networking) | ✅ Available | Claude Code, Codex |
+| Keychain/passkeys and localization workflows | ✅ Available | Codex |
+| macOS HIG, Catalyst/iOS-on-Mac adaptation, and performance profiling | ✅ Available | Codex |
+| Repository-owned native macOS SwiftUI/AppKit implementation skills | 🚧 Planned | — |
+| watchOS | 🚧 Planned | — |
 
 The status table tracks skills maintained in this repository, not additional skills that may be installed by the
 Codex environment.
